@@ -120,3 +120,8 @@ ol, ul {
 .square.right {
   border-left-style: solid;
 } 
+
+.row
+{
+  display: block;
+}

@@ -46,9 +46,11 @@ class App extends Component
         <div className="row">
             {this.renderSquare(0)}{this.renderSquare(1)}{this.renderSquare(2)}
         </div>
+        <br/>
         <div className="row">
             {this.renderSquare(3)}{this.renderSquare(4)}{this.renderSquare(5)}
         </div>
+        <br/>
         <div className="row">
             {this.renderSquare(6)}{this.renderSquare(7)}{this.renderSquare(8)}
         </div>
@@ -61,10 +63,12 @@ class App extends Component
   renderSquare(i) 
   {
     const className = (this.state.squares[i] == null) ? "square" :
-        (this.state.winner != null && this.state.winner === this.state.squares[i] && this.state.winningLine.includes(i)) ? 
+        (this.state.winner != null && 
+          this.state.winner === this.state.squares[i] && 
+          this.state.winningLine.includes(i)) ? 
         "square-winner" : "square-full";
-    const enabled = (this.winner == null && this.state.squares[i] == null) ? true : false;
-    const eventHandler = (enabled)? this.handleClick: ()=>{};
+    const enabled = (this.state.winner == null && this.state.squares[i] == null) ? true : false;
+    const eventHandler = (enabled)? this.handleClick : ()=>{};
     const output = 
         <div className={className} id={i}
             onClick={eventHandler}>
