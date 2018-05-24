@@ -26,6 +26,7 @@ class App extends Component
         [2, 4, 6],
         ];
 
+    this.handleClick = this.handleClick.bind(this);
   }
 
 
@@ -43,13 +44,13 @@ class App extends Component
       <div>      
         <div className="status">{status}</div>
         <div className="row">
-            {this.renderSquare(0)}{this.renderSquare(1)}${this.renderSquare(2)}
+            {this.renderSquare(0)}{this.renderSquare(1)}{this.renderSquare(2)}
         </div>
         <div className="row">
-            {this.renderSquare(3)}{this.renderSquare(4)}${this.renderSquare(5)}
+            {this.renderSquare(3)}{this.renderSquare(4)}{this.renderSquare(5)}
         </div>
         <div className="row">
-            {this.renderSquare(6)}{this.renderSquare(7)}${this.renderSquare(8)}
+            {this.renderSquare(6)}{this.renderSquare(7)}{this.renderSquare(8)}
         </div>
       </div> 
     );
@@ -63,7 +64,7 @@ class App extends Component
         (this.state.winner != null && this.state.winner === this.state.squares[i]) ? 
         "square-winner" : "square-full";
     const enabled = (this.winner == null && this.state.squares[i] == null) ? true : false;
-    const eventHandler = (enabled)? "this.handleClick(" + i + ")": "";
+    const eventHandler = (enabled)? this.handleClick: ()=>{};
     const output = 
         <div className={className} id={i}
             onClick={eventHandler}>
@@ -75,8 +76,41 @@ class App extends Component
 
 
   handleClick(e)
+  {    
+    // get square
+    const i = e.target.id;
+    // copy state
+    let squaresCopy = JSON.parse(JSON.stringify(this.state.squares));
+    // set square
+    squaresCopy[i] = this.state.xIsNext ? 'X' : 'O';
+    // check for winner
+    let calculatedWin = this.calculateWinner(squaresCopy);
+    // change state
+    this.setState(
+      {
+        squares: squaresCopy,
+        xIsNext: !this.state.xIsNext,
+        winner: calculatedWin.player,
+        winningLine: calculatedWin.winningLine,
+      }
+    );
+  }
+
+
+
+  calculateWinner(squares) 
   {
-    console.log(e.target.id);
+    for (let i = 0; i < this.lines.length; i++) {
+        const [a, b, c] = this.lines[i];       
+        if (squares[a] && 
+        squares[a] === squares[b] && 
+        squares[a] === squares[c]) 
+        {
+            return {player: squares[a], winningLine: this.lines[i]};
+        }
+    }
+
+    return {player: null, winningLine: []};
   }
 }
 
